@@ -12,17 +12,27 @@ dotenv.config({});
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:5173', 'https://job-client-dij9.vercel.app', "https://jobp.netlify.app"];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
-const corsOptions = {
-    // for testing
-    origin:'*',
-    credentials:true
-}
 
-app.use(cors(corsOptions));
+
 
 const PORT = process.env.PORT || 3000;
 
