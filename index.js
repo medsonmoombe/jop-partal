@@ -12,16 +12,8 @@ dotenv.config({});
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:5173', 'https://job-client-dij9.vercel.app', "https://jobp.netlify.app", "https://job-client-gt5w-6c2of8phg-emmanuel-moombes-projects.vercel.app/"];
-
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: true,
     credentials: true,
 };
 
