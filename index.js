@@ -21,30 +21,13 @@ const app = express();
 app.use(helmet());
 app.use(mongoSanitize());
 
-// CORS configuration
-const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://jop-partal.onrender.com',
-    process.env.CLIENT_URL
-].filter(Boolean);
-
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+// CORS configuration - Allow all origins
+app.use(cors({
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
-};
-app.use(cors(corsOptions));
+}));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
