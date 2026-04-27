@@ -103,7 +103,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
         .cookie("token", token, { 
             maxAge: 7 * 24 * 60 * 60 * 1000, 
             httpOnly: true, 
-            sameSite: 'strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             secure: process.env.NODE_ENV === 'production'
         })
         .json({
@@ -115,7 +115,12 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
     return res.status(200)
-        .cookie("token", "", { maxAge: 0 })
+        .cookie("token", "", { 
+            maxAge: 0,
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: process.env.NODE_ENV === 'production'
+        })
         .json({
             message: "Logged out successfully.",
             success: true
